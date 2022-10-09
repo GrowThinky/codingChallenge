@@ -2,16 +2,17 @@ package heindl.codingChallenge;
 
 import java.util.HashMap;
 
-public class Roman {
+public class Translator {
 
 	String input;
 	String[] tokens;
 	public HashMap<String, Integer> newDictionary;
 	public HashMap<String, Integer> romanDictionary;
 
-	public Roman() {
+	public Translator() {
 		newDictionary = new HashMap<String, Integer>();
 		romanDictionary = new HashMap<String, Integer>();
+		romanDictionary.put("M", 1000);
 		romanDictionary.put("C", 100);
 		romanDictionary.put("X", 10);
 		romanDictionary.put("V", 5);
@@ -21,6 +22,7 @@ public class Roman {
 	/*
 	 * Takes user input and delegates it to the correct method to process.
 	 */
+	public int currentResult;
 	public void evalInput(String input) {
 		String[] tokens = input.split(" ");
 
@@ -31,14 +33,12 @@ public class Roman {
 			inferValue(input);
 		}
 		if (input.startsWith("how many ")) {
-			translate(input);
+			String cleanedInput = input.replace("how many Credits is ", "");
+			cleanedInput = cleanedInput.replace(" ?", "");
+			currentResult = translate(cleanedInput);
 		}
 	}
-
-	private boolean isRoman(String symbol) {
-		return romanDictionary.containsKey(symbol);
-	}
-
+	
 	/*
 	 * Translates a given String input to integer.
 	 */
@@ -46,6 +46,12 @@ public class Roman {
 		tokens = input.split(" ");
 		return eval(0, tokens);
 	}
+
+
+	private boolean isRoman(String symbol) {
+		return romanDictionary.containsKey(symbol);
+	}
+
 
 	/*
 	 * Fills the dictionary with new key value pairs.
@@ -70,7 +76,7 @@ public class Roman {
 		String newSymbol = null;
 		int j = 0;
 		for (int i = 0; i < tokens.length; i++) {
-			if (newDictionary.containsKey(knownSymbols[i])) {
+			if (newDictionary.containsKey(tokens[i])) {
 				knownSymbols[j] = tokens[i];
 				j++;
 			} else {
