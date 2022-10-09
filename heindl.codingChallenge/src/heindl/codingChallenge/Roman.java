@@ -6,19 +6,41 @@ public class Roman {
 
 	String input;
 	String[] tokens;
-	HashMap<String, Integer> newDictionary;
-	HashMap<String, Integer> romanDictionary;
+	public HashMap<String, Integer> newDictionary;
+	public HashMap<String, Integer> romanDictionary;
 
 	public Roman() {
+		newDictionary = new HashMap<String, Integer>();
 		romanDictionary = new HashMap<String, Integer>();
+		romanDictionary.put("C", 100);
 		romanDictionary.put("X", 10);
 		romanDictionary.put("V", 5);
 		romanDictionary.put("I", 1);
 	}
 
-	
 	/*
-	 * Translates a given String input to integer. 
+	 * Takes user input and delegates it to the correct method to process.
+	 */
+	public void evalInput(String input) {
+		String[] tokens = input.split(" ");
+
+		if (isRoman(tokens[tokens.length - 1]) && !input.contains("Credits")) {
+			learn(input);
+		}
+		if (input.endsWith("Credits")) {
+			inferValue(input);
+		}
+		if (input.startsWith("how many ")) {
+			translate(input);
+		}
+	}
+
+	private boolean isRoman(String symbol) {
+		return romanDictionary.containsKey(symbol);
+	}
+
+	/*
+	 * Translates a given String input to integer.
 	 */
 	public int translate(String input) {
 		tokens = input.split(" ");
@@ -26,7 +48,7 @@ public class Roman {
 	}
 
 	/*
-	 * Fills the dictionary with new key value pairs. 
+	 * Fills the dictionary with new key value pairs.
 	 */
 	private void learn(String input) {
 		tokens = input.split(" is ");
@@ -37,13 +59,14 @@ public class Roman {
 	}
 
 	/*
-	 * Infers value of unknown symbol and adds it as new key-value pair to dictionary 
+	 * Infers value of unknown symbol and adds it as new key-value pair to
+	 * dictionary
 	 */
 	private void inferValue(String input) {
 		String[] parts = input.split(" is ");
 		int result = Integer.valueOf(parts[1].split(" ")[0]);
 		tokens = parts[0].split(" ");
-		String[] knownSymbols = new String[tokens.length-1];
+		String[] knownSymbols = new String[tokens.length - 1];
 		String newSymbol = null;
 		int j = 0;
 		for (int i = 0; i < tokens.length; i++) {
@@ -65,7 +88,7 @@ public class Roman {
 		if (i == tokens.length - 1) {
 			return newDictionary.get(tokens[i]);
 		}
-		
+
 		int first = newDictionary.get(tokens[i]);
 		int second = newDictionary.get(tokens[i + 1]);
 
@@ -76,6 +99,5 @@ public class Roman {
 		}
 
 	}
-	
 
 }
