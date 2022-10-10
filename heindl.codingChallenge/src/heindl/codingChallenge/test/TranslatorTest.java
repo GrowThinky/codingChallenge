@@ -1,49 +1,75 @@
 package heindl.codingChallenge.test;
 
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import heindl.codingChallenge.Translator;
 
 class TranslatorTest {
 
-	static HashMap<String, Integer> romanTestInput;
-	HashMap<String, Integer> learnTestInput;
+	static LinkedHashMap<String, Integer> testInput;
 
-	@BeforeAll
-	static void setUp() {
-		romanTestInput = new HashMap<String, Integer>();
-		romanTestInput.put("I", 1);
-		romanTestInput.put("I I", 2);
-		romanTestInput.put("I I I", 3);
-		romanTestInput.put("I V", 4);
-		romanTestInput.put("V", 5);
-		romanTestInput.put("V I", 6);
-		romanTestInput.put("V I I", 7);
-		romanTestInput.put("V I I I", 8);
-		romanTestInput.put("I X", 9);
-		romanTestInput.put("X", 10);
-		romanTestInput.put("X I I", 12);
-		romanTestInput.put("X V", 15);
-		romanTestInput.put("X V I", 16);
-		romanTestInput.put("X X V", 25);
+	String input;
+	Integer solution;
+	int result;
+
+
+	@Test
+	void specificationTest() {
+		testInput = new LinkedHashMap<String, Integer>();
+		testInput.put("glob is I", null);
+		testInput.put("prok is V", null);
+		testInput.put("pish is X", null);
+		testInput.put("tegj is L", null);
+		testInput.put("glob glob Silver is 34 Credits", null);
+		testInput.put("glob prok Gold is 57800 Credits", null);
+		testInput.put("pish pish Iron is 3910 Credits", null);
+		testInput.put("how much is pish tegj glob glob ?", 42);
+		testInput.put("how many Credits is glob prok Silver ?" , 68);
+		testInput.put("how many Credits is glob prok Gold ?", 57800);
+		testInput.put("how many Credits is glob prok Iron ?", 782);
+		testInput.put("how much wood could a woodchuck chuck if a woodchuck could chuck wood ?", null );
+		
+		Translator translator = new Translator();
+		
+
+		for (Map.Entry<String, Integer> entry : testInput.entrySet()) {
+			input = entry.getKey();
+			solution = entry.getValue();
+			translator.evalInput(input);
+			if (solution != null) {
+				assertEquals(solution, translator.currentResult);
+			}
+		}
+		for (Map.Entry<String, Integer> entry : translator.newDictionary.entrySet()) {
+			input = entry.getKey();
+		}
 
 	}
 
 	@Test
 	void romanDictionaryTest() {
+		testInput = new LinkedHashMap<String, Integer>();
+		testInput.put("I", 1);
+		testInput.put("I I", 2);
+		testInput.put("I I I", 3);
+		testInput.put("I V", 4);
+		testInput.put("V", 5);
+		testInput.put("V I", 6);
+		testInput.put("V I I", 7);
+		testInput.put("V I I I", 8);
+		testInput.put("I X", 9);
+		testInput.put("X", 10);
+		testInput.put("X I I", 12);
+		testInput.put("X V", 15);
+		testInput.put("X V I", 16);
+		testInput.put("X X V", 25);
+		
 		Translator translator = new Translator();
 		translator.newDictionary = translator.romanDictionary;
 
-		String input;
-		Integer solution;
-		int result;
-
-		for (Map.Entry<String, Integer> entry : romanTestInput.entrySet()) {
+		for (Map.Entry<String, Integer> entry : testInput.entrySet()) {
 			input = entry.getKey();
 			solution = entry.getValue();
 			result = translator.translate(input);
@@ -67,25 +93,22 @@ class TranslatorTest {
 		translator.evalInput("vlob is X");
 		translator.evalInput("tlob is I");
 
-		translator.evalInput("how many Credits is blob tlob ?");
+		translator.evalInput("how much is blob tlob ?");
 		assertEquals(6, translator.currentResult);
 
 	}
 
 	@Test
-	void inferValueTest() {
-		
+	void calculateOrePriceTest() {
 		Translator translator = new Translator();
-		translator.newDictionary = translator.romanDictionary;
-		
-		translator = new Translator();
-		translator.newDictionary = translator.romanDictionary;
-		translator.newDictionary.remove("X");
-		assertFalse(translator.newDictionary.containsKey("X"));
+		translator.evalInput("blob is V");
+		translator.evalInput("vlob is X");
+		translator.evalInput("tlob is I");
+		assertFalse(translator.orePrices.containsKey("Unobtainium"));
 
-		translator.evalInput("X C is 90 Credits");
-		assertTrue(translator.newDictionary.containsKey("X"));
-		assertEquals(10, translator.newDictionary.get("X"));
+		translator.evalInput("vlob tlob Unobtainium is 110000 Credits");
+		assertTrue(translator.orePrices.containsKey("Unobtainium"));
+		assertEquals(10000, translator.orePrices.get("Unobtainium"));
 	}
 
 }

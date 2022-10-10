@@ -6,14 +6,20 @@ public class Translator {
 
 	String input;
 	String[] tokens;
-	public HashMap<String, Integer> newDictionary;
+	
+	public HashMap<String, Float> orePrices;
 	public HashMap<String, Integer> romanDictionary;
+	public HashMap<String, Integer> newDictionary;
 
 	public Translator() {
 		newDictionary = new HashMap<String, Integer>();
+		orePrices = new HashMap<String, Float>();
 		romanDictionary = new HashMap<String, Integer>();
+		romanDictionary.put("V", 5000);
 		romanDictionary.put("M", 1000);
+		romanDictionary.put("D", 500);
 		romanDictionary.put("C", 100);
+		romanDictionary.put("L", 50);
 		romanDictionary.put("X", 10);
 		romanDictionary.put("V", 5);
 		romanDictionary.put("I", 1);
@@ -23,20 +29,33 @@ public class Translator {
 	 * Takes user input and delegates it to the correct method to process.
 	 */
 	public int currentResult;
+	
+	
 	public void evalInput(String input) {
 		String[] tokens = input.split(" ");
+		String cleanedInput;
 
 		if (isRoman(tokens[tokens.length - 1]) && !input.contains("Credits")) {
 			learn(input);
 		}
 		if (input.endsWith("Credits")) {
-			inferValue(input);
+			calculateOrePrice(input);
 		}
-		if (input.startsWith("how many ")) {
-			String cleanedInput = input.replace("how many Credits is ", "");
+		if (input.startsWith("how much is ")) {
+			cleanedInput = input.split(" is ")[1];
 			cleanedInput = cleanedInput.replace(" ?", "");
 			currentResult = translate(cleanedInput);
 		}
+		if (input.startsWith("how many")) {
+			cleanedInput = input.split(" is ")[1];
+			cleanedInput = cleanedInput.replace(" Iron ", "");
+			cleanedInput = cleanedInput.replace(" Silver ", "");
+			cleanedInput = cleanedInput.replace(" Gold ", "");
+			cleanedInput = cleanedInput.replace("?", "");
+			
+			currentResult = (int)(translate(cleanedInput) * orePrices.get(tokens[tokens.length - 2]));
+		}
+
 	}
 	
 	/*
@@ -65,30 +84,31 @@ public class Translator {
 	}
 
 	/*
-	 * Infers value of unknown symbol and adds it as new key-value pair to
-	 * dictionary
+	 * Infers value of an unknown ore and adds it as a new key-value pair to
+	 * the ore prices dictionary.
 	 */
-	private void inferValue(String input) {
-		String[] parts = input.split(" is ");
-		int result = Integer.valueOf(parts[1].split(" ")[0]);
-		tokens = parts[0].split(" ");
+	private void calculateOrePrice(String input) {
+		String[] inputParts = input.split(" is ");
+		float result = Integer.valueOf(inputParts[1].split(" ")[0]);
+		tokens = inputParts[0].split(" ");
 		String[] knownSymbols = new String[tokens.length - 1];
-		String newSymbol = null;
+		String oreName = null;
 		int j = 0;
 		for (int i = 0; i < tokens.length; i++) {
 			if (newDictionary.containsKey(tokens[i])) {
 				knownSymbols[j] = tokens[i];
 				j++;
 			} else {
-				newSymbol = tokens[i];
+				oreName = tokens[i];
 			}
 		}
-		int newTranslation = Math.abs(result - eval(0, knownSymbols));
-		newDictionary.put(newSymbol, newTranslation);
+		float orePrice = result / eval(0, knownSymbols);
+		orePrices.put(oreName, orePrice);
 	}
 
 	/*
-	 * Evaluates an array of known symbols to an integer value.
+	 * Evaluates an array of known symbols that follows the rules of roman numerals 
+	 * to an integer value.
 	 */
 	private int eval(int i, String[] tokens) {
 		if (i == tokens.length - 1) {
@@ -105,5 +125,7 @@ public class Translator {
 		}
 
 	}
+	
+
 
 }
