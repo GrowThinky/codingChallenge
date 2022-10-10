@@ -3,14 +3,12 @@
 This is a pretty simple solution to the "Merchant's guide to the galaxy"
 coding challenge.
 
-The folder contains an Eclipse Project:
+## The folder contains an Eclipse Project:
 
 **Code is in:**
-
 heindl.codingChallenge/src/heindl/codingChallenge/Translator.java
 
 **Tests:**
-
 heindl.codingChallenge/src/heindl/codingChallenge/test/TranslatorTest.java
 
 
