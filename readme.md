@@ -5,11 +5,13 @@ coding challenge.
 
 The folder contains an Eclipse Project:
 
-Code is in:
-**heindl.codingChallenge/src/heindl/codingChallenge/Translator.java**
+**Code is in:**
 
-Tests:
-**heindl.codingChallenge/src/heindl/codingChallenge/test/TranslatorTest.java**
+heindl.codingChallenge/src/heindl/codingChallenge/Translator.java
+
+**Tests:**
+
+heindl.codingChallenge/src/heindl/codingChallenge/test/TranslatorTest.java
 
 
 ## Notes:
@@ -19,6 +21,5 @@ to process the inputs.
 * Currently is assuming inputs are actually following the rules of roman
 numerals.
 * Next step would be improving the string manipulation for input handling.
-
 * Also it would be nice to add support for multiple different currencies apart from
 "Credits" which could be inferred automatically from the input.
