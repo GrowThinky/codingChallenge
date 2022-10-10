@@ -3,6 +3,7 @@ package heindl.codingChallenge;
 import java.util.HashMap;
 
 public class Translator {
+	
 
 	String input;
 	String[] tokens;
@@ -33,7 +34,9 @@ public class Translator {
 	 */
 	public void passInput(String input) {
 		try {
+			
 			evalInput(input);
+			
 		} catch (Exception e) {
 			System.out.println("I have no idea what you are talking about ");
 		}
@@ -41,19 +44,23 @@ public class Translator {
 
 	/*
 	 * Takes user input and delegates it to the correct method to process.
+	 * I consider the string handling to be a "quick and dirty" solution, which should be cleaned up. 
 	 */
 	public void evalInput(String input) throws IllegalArgumentException {
 		String[] tokens = input.split(" ");
 		String cleanedInput;
 
-		if (isRoman(tokens[tokens.length - 1]) && !input.contains("Credits")) {
+		// input contains translation information
+		if (isRoman(tokens[tokens.length - 1])) {
 			learn(input);
 			return;
 			
+		// input contains orePrice information
 		} else if (input.endsWith("Credits")) {
 			calculateOrePrice(input);
 			return;
 			
+			// input asks for unit conversion 
 		} else if (input.startsWith("how much is ")) {
 			cleanedInput = input.split(" is ")[1];
 			cleanedInput = cleanedInput.replace(" ?", "");
@@ -62,6 +69,7 @@ public class Translator {
 			System.out.println(cleanedInput + " is " + currentResult);
 			return;
 			
+			// input asks for price of ore amount 
 		} else if (input.startsWith("how many")) {
 			cleanedInput = input.split(" is ")[1];
 			cleanedInput = cleanedInput.replace(" Iron ", "");
@@ -74,6 +82,7 @@ public class Translator {
 			System.out.println(cleanedInput + " " + oreName + " is " + currentResult + " Credits");
 			return;
 
+			
 		} else {
 			throw new IllegalArgumentException();
 		}
@@ -128,16 +137,14 @@ public class Translator {
 
 	/*
 	 * Evaluates an array of known symbols that follows the rules of roman numerals
-	 * to an integer value.
+	 * into an integer value.
 	 */
 	private int eval(int i, String[] tokens) {
 		if (i == tokens.length - 1) {
 			return newDictionary.get(tokens[i]);
 		}
-
 		int first = newDictionary.get(tokens[i]);
 		int second = newDictionary.get(tokens[i + 1]);
-
 		if (first >= second) {
 			return first + eval(i + 1, tokens);
 		} else {

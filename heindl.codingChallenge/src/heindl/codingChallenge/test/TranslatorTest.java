@@ -13,8 +13,8 @@ class TranslatorTest {
 	String input;
 	Integer solution;
 	int result;
-
-
+	
+	
 	@Test
 	void specificationTest() {
 		testInput = new LinkedHashMap<String, Integer>();
