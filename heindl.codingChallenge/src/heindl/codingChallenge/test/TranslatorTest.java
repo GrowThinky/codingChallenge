@@ -33,11 +33,10 @@ class TranslatorTest {
 		
 		Translator translator = new Translator();
 		
-
 		for (Map.Entry<String, Integer> entry : testInput.entrySet()) {
 			input = entry.getKey();
 			solution = entry.getValue();
-			translator.evalInput(input);
+			translator.passInput(input);
 			if (solution != null) {
 				assertEquals(solution, translator.currentResult);
 			}
@@ -80,7 +79,7 @@ class TranslatorTest {
 	@Test
 	void learnTest() {
 		Translator translator = new Translator();
-		translator.evalInput("blob is V");
+		translator.passInput("blob is V");
 		assertTrue(translator.newDictionary.containsKey("blob"));
 		assertEquals(5, translator.newDictionary.get("blob"));
 	}
@@ -89,9 +88,9 @@ class TranslatorTest {
 	void translateTest() {
 
 		Translator translator = new Translator();
-		translator.evalInput("blob is V");
-		translator.evalInput("vlob is X");
-		translator.evalInput("tlob is I");
+		translator.passInput("blob is V");
+		translator.passInput("vlob is X");
+		translator.passInput("tlob is I");
 
 		int result = translator.translate("blob tlob");
 		assertEquals(6, result);
@@ -101,12 +100,12 @@ class TranslatorTest {
 	@Test
 	void calculateOrePriceTest() {
 		Translator translator = new Translator();
-		translator.evalInput("blob is V");
-		translator.evalInput("vlob is X");
-		translator.evalInput("tlob is I");
+		translator.passInput("blob is V");
+		translator.passInput("vlob is X");
+		translator.passInput("tlob is I");
 		assertFalse(translator.orePrices.containsKey("Unobtainium"));
 
-		translator.evalInput("vlob tlob Unobtainium is 110000 Credits");
+		translator.passInput("vlob tlob Unobtainium is 110000 Credits");
 		assertTrue(translator.orePrices.containsKey("Unobtainium"));
 		assertEquals(10000, translator.orePrices.get("Unobtainium"));
 	}

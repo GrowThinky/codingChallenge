@@ -6,7 +6,7 @@ public class Translator {
 
 	String input;
 	String[] tokens;
-	
+
 	public HashMap<String, Float> orePrices;
 	public HashMap<String, Integer> romanDictionary;
 	public HashMap<String, Integer> newDictionary;
@@ -25,44 +25,61 @@ public class Translator {
 		romanDictionary.put("I", 1);
 	}
 
+	
+	public int currentResult;
+
 	/*
 	 * Takes user input and delegates it to the correct method to process.
 	 */
-	public int currentResult;
-	
-	
-	public void evalInput(String input) {
+	public void passInput(String input) {
+		try {
+			evalInput(input);
+		} catch (Exception e) {
+			System.out.println("I have no idea what you are talking about ");
+		}
+	}
+
+	/*
+	 * Takes user input and delegates it to the correct method to process.
+	 */
+	public void evalInput(String input) throws IllegalArgumentException {
 		String[] tokens = input.split(" ");
 		String cleanedInput;
 
 		if (isRoman(tokens[tokens.length - 1]) && !input.contains("Credits")) {
 			learn(input);
-		}
-		if (input.endsWith("Credits")) {
+			return;
+			
+		} else if (input.endsWith("Credits")) {
 			calculateOrePrice(input);
-		}
-		if (input.startsWith("how much is ")) {
+			return;
+			
+		} else if (input.startsWith("how much is ")) {
 			cleanedInput = input.split(" is ")[1];
 			cleanedInput = cleanedInput.replace(" ?", "");
 			currentResult = translate(cleanedInput);
+
+			System.out.println(cleanedInput + " is " + currentResult);
+			return;
 			
-			System.out.println(cleanedInput + " is "+ currentResult);
-		}
-		if (input.startsWith("how many")) {
+		} else if (input.startsWith("how many")) {
 			cleanedInput = input.split(" is ")[1];
 			cleanedInput = cleanedInput.replace(" Iron ", "");
 			cleanedInput = cleanedInput.replace(" Silver ", "");
 			cleanedInput = cleanedInput.replace(" Gold ", "");
 			cleanedInput = cleanedInput.replace("?", "");
 			String oreName = tokens[tokens.length - 2];
-			
-			currentResult = (int)(translate(cleanedInput) * orePrices.get(oreName));
-			
-			System.out.println(cleanedInput + " " + oreName + " is "+ currentResult + " Credits");
+
+			currentResult = (int) (translate(cleanedInput) * orePrices.get(oreName));
+			System.out.println(cleanedInput + " " + oreName + " is " + currentResult + " Credits");
+			return;
+
+		} else {
+			throw new IllegalArgumentException();
 		}
 
 	}
-	
+
 	/*
 	 * Translates a given String input to integer.
 	 */
@@ -71,11 +88,9 @@ public class Translator {
 		return eval(0, tokens);
 	}
 
-
 	private boolean isRoman(String symbol) {
 		return romanDictionary.containsKey(symbol);
 	}
-
 
 	/*
 	 * Fills the dictionary with new key value pairs.
@@ -89,8 +104,8 @@ public class Translator {
 	}
 
 	/*
-	 * Infers value of an unknown ore and adds it as a new key-value pair to
-	 * the ore prices dictionary.
+	 * Infers value of an unknown ore and adds it as a new key-value pair to the ore
+	 * prices dictionary.
 	 */
 	private void calculateOrePrice(String input) {
 		String[] inputParts = input.split(" is ");
@@ -112,7 +127,7 @@ public class Translator {
 	}
 
 	/*
-	 * Evaluates an array of known symbols that follows the rules of roman numerals 
+	 * Evaluates an array of known symbols that follows the rules of roman numerals
 	 * to an integer value.
 	 */
 	private int eval(int i, String[] tokens) {
@@ -130,7 +145,5 @@ public class Translator {
 		}
 
 	}
-	
-
 
 }
