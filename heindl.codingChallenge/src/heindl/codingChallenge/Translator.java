@@ -45,6 +45,8 @@ public class Translator {
 			cleanedInput = input.split(" is ")[1];
 			cleanedInput = cleanedInput.replace(" ?", "");
 			currentResult = translate(cleanedInput);
+			
+			System.out.println(cleanedInput + " is "+ currentResult);
 		}
 		if (input.startsWith("how many")) {
 			cleanedInput = input.split(" is ")[1];
@@ -52,8 +54,11 @@ public class Translator {
 			cleanedInput = cleanedInput.replace(" Silver ", "");
 			cleanedInput = cleanedInput.replace(" Gold ", "");
 			cleanedInput = cleanedInput.replace("?", "");
+			String oreName = tokens[tokens.length - 2];
 			
-			currentResult = (int)(translate(cleanedInput) * orePrices.get(tokens[tokens.length - 2]));
+			currentResult = (int)(translate(cleanedInput) * orePrices.get(oreName));
+			
+			System.out.println(cleanedInput + " " + oreName + " is "+ currentResult + " Credits");
 		}
 
 	}

@@ -93,8 +93,8 @@ class TranslatorTest {
 		translator.evalInput("vlob is X");
 		translator.evalInput("tlob is I");
 
-		translator.evalInput("how much is blob tlob ?");
-		assertEquals(6, translator.currentResult);
+		int result = translator.translate("blob tlob");
+		assertEquals(6, result);
 
 	}
 
