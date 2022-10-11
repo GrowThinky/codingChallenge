@@ -2,6 +2,10 @@ package heindl.codingChallenge;
 
 import java.util.HashMap;
 
+/*
+ * Processes and stores fictional aliases for Roman numerals and handles translation and 
+ * calculation of fictional ore prices. 
+ */
 public class Translator {
 	
 
@@ -50,6 +54,7 @@ public class Translator {
 		String[] tokens = input.split(" ");
 		String cleanedInput;
 
+		try {
 		// input contains translation information
 		if (isRoman(tokens[tokens.length - 1])) {
 			learn(input);
@@ -81,22 +86,26 @@ public class Translator {
 			currentResult = (int) (translate(cleanedInput) * orePrices.get(oreName));
 			System.out.println(cleanedInput + " " + oreName + " is " + currentResult + " Credits");
 			return;
-
-			
-		} else {
-			throw new IllegalArgumentException();
 		}
-
+		
+	} catch (Exception e) {
+		throw new IllegalArgumentException();
 	}
+	throw new IllegalArgumentException();
+
+}
 
 	/*
-	 * Translates a given String input to integer.
+	 * Translates a given sequence of symbols to integer.
 	 */
 	public int translate(String input) {
 		tokens = input.split(" ");
 		return eval(0, tokens);
 	}
 
+	/*
+	 * Checks if symbol is a key in the roman dictionary. 
+	 */
 	private boolean isRoman(String symbol) {
 		return romanDictionary.containsKey(symbol);
 	}
@@ -104,7 +113,7 @@ public class Translator {
 	/*
 	 * Fills the dictionary with new key value pairs.
 	 */
-	private void learn(String input) {
+	private void learn(String input) throws IllegalArgumentException{
 		tokens = input.split(" is ");
 		if (tokens.length != 2) {
 			throw new IllegalArgumentException();
