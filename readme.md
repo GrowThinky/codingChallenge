@@ -5,7 +5,7 @@ coding challenge.
 
 ## The folder contains an Eclipse Project:
 
-**Code is in:**
+**Code:**
 heindl.codingChallenge/src/heindl/codingChallenge/Translator.java
 
 **Tests:**
@@ -13,9 +13,7 @@ heindl.codingChallenge/src/heindl/codingChallenge/test/TranslatorTest.java
 
 
 ## Notes:
-* Inputs need to stick to the format defined in the specification. To handle a
-wider range of possible inputs, a possible next step would be using regular expressions
-to process the inputs.
+* Inputs need to stick to the format defined in the specification. 
 * Currently is assuming inputs are actually following the rules of roman
 numerals.
 * Next step would be improving the string manipulation for input handling.
